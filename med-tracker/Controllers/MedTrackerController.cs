@@ -8,21 +8,15 @@ namespace medtracker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class MedTrackerController : ControllerBase
     {
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        // GET api/medtracker
+        [HttpGet]
+        public async Task Get()
         {
-            return "value";
+            SlackAPI client = new SlackAPI();
+            await client.SendMessage("token", "channel", "A message");
         }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
     }
 }
