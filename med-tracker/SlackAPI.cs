@@ -9,10 +9,6 @@ using System.Threading.Tasks;
 
 namespace medtracker
 {
-    interface ISlackAPI
-    {
-        Task SendMessage(string token, string channelID, string message);
-    }
     public class SlackAPI : ISlackAPI
     {
         public static HttpClient GetHTTPClient(string token)

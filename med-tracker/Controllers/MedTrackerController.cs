@@ -16,7 +16,7 @@ namespace medtracker.Controllers
         public async Task Get()
         {
             SlackAPI client = new SlackAPI();
-            await client.SendMessage("token", "channel", "A message");
+            await client.SendMessage("<token>", "<channel>", "a message");
         }
     }
 }
