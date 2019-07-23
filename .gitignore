@@ -8,7 +8,7 @@
 
 # User-specific files
 tokens.txt
-medtracker/SQL/data.db
+med-tracker/SQL/data.db
 
 *.suo
 *.user
