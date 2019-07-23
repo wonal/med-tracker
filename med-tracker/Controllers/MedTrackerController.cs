@@ -10,13 +10,23 @@ namespace medtracker.Controllers
     [ApiController]
     public class MedTrackerController : ControllerBase
     {
+        private readonly SlackAPI client;
+        public MedTrackerController(SlackAPI client)
+        {
+            this.client = client;
+        }
 
         // GET api/medtracker
         [HttpGet]
-        public async Task Get()
+        public async Task TestMessage()
         {
-            SlackAPI client = new SlackAPI();
-            await client.SendMessage("<token>", "<channel>", "a message");
+            await client.SendMessage("<token>", "<channel>", "Here's a message");
+        }
+
+        [HttpGet("authorize")]
+        public async Task GetAuthTokens()
+        {
+            string response = await client.Authorize("<client_id>", new List<string> {"bot", "command", );
         }
     }
 }
