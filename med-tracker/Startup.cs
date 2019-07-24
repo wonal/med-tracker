@@ -28,6 +28,7 @@ namespace medtracker
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton(Configuration);
             services.AddSingleton<CredentialsRepository>();
+            services.AddSingleton<SlackAPI>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

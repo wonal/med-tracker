@@ -7,6 +7,12 @@ namespace medtracker.DTOs
         public string text { get; set; }
     }
 
+    public class AccessDTO
+    {
+        public string access_token { get; set; }
+        public string scope { get; set; }
+    }
+
     public class BotDTO
     {
         public string bot_user_id { get; set; }

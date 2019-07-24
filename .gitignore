@@ -9,6 +9,7 @@
 # User-specific files
 tokens.txt
 med-tracker/SQL/data.db
+med-tracker/Config/ClientKeys.cs
 
 *.suo
 *.user

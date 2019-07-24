@@ -8,6 +8,7 @@ namespace medtracker
 {
     interface ISlackAPI
     {
+        Task<AuthResponseDTO> Authorize(string code);
         Task SendMessage(string token, string channelID, string message);
     }
 }

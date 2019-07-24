@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using medtracker.Config;
+using medtracker.DTOs;
+using medtracker.SQL;
 using Microsoft.AspNetCore.Mvc;
 
 namespace medtracker.Controllers
@@ -11,9 +14,11 @@ namespace medtracker.Controllers
     public class MedTrackerController : ControllerBase
     {
         private readonly SlackAPI client;
-        public MedTrackerController(SlackAPI client)
+        private readonly CredentialsRepository repository;
+        public MedTrackerController(SlackAPI client, CredentialsRepository repository)
         {
             this.client = client;
+            this.repository = repository;
         }
 
         // GET api/medtracker
@@ -23,10 +28,11 @@ namespace medtracker.Controllers
             await client.SendMessage("<token>", "<channel>", "Here's a message");
         }
 
-        [HttpGet("authorize")]
-        public async Task GetAuthTokens()
+        [HttpGet("slackaccess")]
+        public async Task GetAuthTokens(string code)
         {
-            string response = await client.Authorize("<client_id>", new List<string> {"bot", "command", );
+            AuthResponseDTO response = await client.Authorize(code);
+            repository.SetCredentials(response.team_id, response);
         }
     }
 }
