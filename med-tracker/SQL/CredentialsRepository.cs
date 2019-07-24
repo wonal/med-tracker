@@ -38,7 +38,7 @@ namespace medtracker.SQL
             {
                 using (var connection = new SqliteConnection(connectionString))
                 {
-                    connection.Execute(@"insert into TeamCredentials (TeamID, Credentials) values (@TeamID, @Credentials)", new { TeamID = teamID, Credentials = JsonConvert.SerializeObject(response) });
+                    connection.Execute(@"insert or replace into TeamCredentials (TeamID, Credentials) values (@TeamID, @Credentials)", new { TeamID = teamID, Credentials = JsonConvert.SerializeObject(response) });
                 }
             }
         }
