@@ -34,5 +34,13 @@ namespace medtracker.Controllers
             AuthResponseDTO response = await client.Authorize(code);
             repository.SetCredentials(response.team_id, response);
         }
+
+        /*
+        [HttpPost("track")]
+        public async Task TrackMeds(TrackCommandDTO commandDTO)
+        {
+
+        }
+        */
     }
 }
