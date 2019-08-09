@@ -6,6 +6,7 @@ using medtracker.Config;
 using medtracker.DTOs;
 using medtracker.SQL;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace medtracker.Controllers
 {
@@ -37,8 +38,8 @@ namespace medtracker.Controllers
             return Ok();
         }
 
-        [HttpPost("mt")]
-        public IActionResult TrackMeds(TrackCommandDTO commandDTO)
+        [HttpPost]
+        public IActionResult TrackMeds([FromForm] SlashCommandDTO slashCommand)
         {
             /*
                         int timestamp = int.Parse(Request.Headers["X-Slack-Request-Timestamp"]);
@@ -49,7 +50,7 @@ namespace medtracker.Controllers
                         string verificationString = Request.Headers["X-Slack-Signature"];
                         string signature = $"v0:{timestamp}:{Request.Body}";
             */
-            return Ok("todo");
+            return Ok(slashCommand.text);
         }
     }
 }

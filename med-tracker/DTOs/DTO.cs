@@ -22,10 +22,12 @@ namespace medtracker.DTOs
         public BotDTO bot { get; set; }
     }
 
-    public class TrackCommandDTO
+    public class SlashCommandDTO
     {
-        public string team_id { get; set; }
+        public string text { get; set; }
         public string user_id { get; set; }
         public string user_name { get; set; }
+        public string team_id { get; set; }
+        public string response_url { get; set; }
     }
 }
