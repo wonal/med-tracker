@@ -30,4 +30,10 @@ namespace medtracker.DTOs
         public string team_id { get; set; }
         public string response_url { get; set; }
     }
+
+    public class UserPreferenceDTO
+    {
+        public string team_id { get; set; }
+        public int time { get; set; }
+    }
 }

@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace medtracker.SQL
 {
-    public class CredentialsRepository 
+    public class CredentialsRepository : IRepository<AuthResponseDTO>
     {
         private readonly object dbLockObject = new object();
         private readonly string connectionString;
@@ -21,10 +21,11 @@ namespace medtracker.SQL
         {
             using (var connection = new SqliteConnection(connectionString))
             {
-                connection.Execute(@"create table if not exists TeamCredentials (Id integer primary key, TeamID varchar(10), Credentials varchar(200))");
+                connection.Execute("create table if not exists TeamCredentials (TeamID varchar(10), Credentials varchar(200));" +
+                                   "create unique index if not exists Teams on TeamCredentials (TeamId)");
             }
         }
-        public AuthResponseDTO GetCredentials(string teamID)
+        public AuthResponseDTO GetValue(string teamID)
         {
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -32,7 +33,7 @@ namespace medtracker.SQL
             }
         }
 
-        public void SetCredentials(string teamID, AuthResponseDTO response)
+        public void SetValue(string teamID, AuthResponseDTO response)
         {
             lock(dbLockObject)
             {
