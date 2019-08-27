@@ -16,12 +16,12 @@ namespace medtracker.Controllers
     {
         private readonly SlackAPI client;
         private readonly CredentialsRepository repository;
-        private readonly UserTimesRepository timeRepository;
-        public MedTrackerController(SlackAPI client, CredentialsRepository repository, UserTimesRepository timeRepository)
+        private readonly CommandHandler handler;
+        public MedTrackerController(SlackAPI client, CommandHandler handler, CredentialsRepository repository)
         {
             this.client = client;
+            this.handler = handler;
             this.repository = repository;
-            this.timeRepository = timeRepository;
         }
 
         // GET api/medtracker
@@ -52,9 +52,8 @@ namespace medtracker.Controllers
                         string verificationString = Request.Headers["X-Slack-Signature"];
                         string signature = $"v0:{timestamp}:{Request.Body}";
             */
-            timeRepository.SetUserTime(slashCommand.user_id, new UserPreferenceDTO { team_id = slashCommand.team_id, time = 9 });
-            var users = timeRepository.GetUsers(9);
-            return Ok($"{users.Count()}");
+            string response = handler.ParseCommand(slashCommand);
+            return Ok(response);
         }
     }
 }

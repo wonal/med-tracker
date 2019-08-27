@@ -24,23 +24,23 @@ namespace medtracker.SQL
         {
             using (var connection = new SqliteConnection(connectionString))
             {
-                connection.Execute("create table if not exists UserTimes (UserId varchar(10), TeamId varchar (10), Time integer, primary key (UserId, TeamId));" +
+                connection.Execute("create table if not exists UserTimes (UserId varchar(10), TeamId varchar (10), Time varchar(6), primary key (UserId, TeamId));" +
                                    "create unique index if not exists UserIndex on UserTimes (UserId, TeamId)");
             }
         }
 
-        public void SetUserTime(string userID, UserPreferenceDTO value)
+        public void SetUserTime(string userID, string teamID, string time)
         {
             lock(dbLockObject)
             {
                 using (var connection = new SqliteConnection(connectionString))
                 {
-                    connection.Execute(@"replace into UserTimes (UserId, TeamId, Time) values (@UserId, @TeamId, @Time)", new { UserId = userID, TeamId = value.team_id, Time = value.time });
+                    connection.Execute(@"replace into UserTimes (UserId, TeamId, Time) values (@UserId, @TeamId, @Time)", new { UserId = userID, TeamId = teamID, Time = time });
                 }
             }
         }
 
-        public IEnumerable<string> GetUsers(int time)
+        public IEnumerable<string> GetUsers(string time)
         {
             using (var connection = new SqliteConnection(connectionString))
             {

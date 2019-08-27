@@ -29,6 +29,7 @@ namespace medtracker
             services.AddSingleton(Configuration);
             services.AddSingleton<CredentialsRepository>();
             services.AddSingleton<UserTimesRepository>();
+            services.AddSingleton<CommandHandler>();
             services.AddSingleton<SlackAPI>();
         }
 
