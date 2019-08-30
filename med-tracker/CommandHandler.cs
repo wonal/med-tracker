@@ -8,11 +8,9 @@ namespace medtracker
     public class CommandHandler
     {
         private readonly UserTimesRepository userPreferences;
-        private readonly BackgroundService service;
-        public CommandHandler(UserTimesRepository userPreferences, BackgroundService service)
+        public CommandHandler(UserTimesRepository userPreferences)
         {
             this.userPreferences = userPreferences;
-            this.service = service;
         }
 
         public string ParseCommand(SlashCommandDTO command)

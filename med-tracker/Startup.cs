@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -31,10 +32,10 @@ namespace medtracker
             services.AddSingleton<UserTimesRepository>();
             services.AddSingleton<CommandHandler>();
             services.AddTransient<SlackAPI>();
-            services.AddSingleton<BackgroundService>();
+            services.AddSingleton<IHostedService, BackgroundService>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
