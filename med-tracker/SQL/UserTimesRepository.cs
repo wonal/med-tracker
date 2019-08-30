@@ -2,6 +2,7 @@
 using medtracker.DTOs;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,7 @@ namespace medtracker.SQL
         {
             using (var connection = new SqliteConnection(connectionString))
             {
+                //return JsonConvert.DeserializeObject<List<UserTeamDTO>>(connection.Query<string>(@"select UserId, TeamId from UserTimes where Time = (@Time)", new { Time = time }).ToList());
                 return connection.Query<string>(@"select UserId from UserTimes where Time = (@Time)", new { Time = time });
             }
         }

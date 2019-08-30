@@ -32,13 +32,20 @@ namespace medtracker.Controllers
             return Ok();
         }
 
+        [HttpPost("slackaccess")]
+        public IActionResult GetAuthTokens(AuthResponseDTO response)
+        {
+            repository.SetValue(response.team_id, response);
+            return Ok();
+        }
+        /*
         [HttpGet("slackaccess")]
         public async Task<IActionResult> GetAuthTokens(string code)
         {
             AuthResponseDTO response = await client.Authorize(code);
             repository.SetValue(response.team_id, response);
             return Ok();
-        }
+        }*/
 
         [HttpPost]
         public IActionResult TrackMeds([FromForm] SlashCommandDTO slashCommand)
