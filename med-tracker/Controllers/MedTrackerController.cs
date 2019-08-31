@@ -26,9 +26,9 @@ namespace medtracker.Controllers
 
         // GET api/medtracker
         [HttpGet]
-        public async Task<IActionResult> TestMessage()
+        public IActionResult TestMessage()
         {
-            await client.SendMessage("<token>", "<channel>", "Here's a message");
+            //await client.SendMessage("<token>", "<channel>", "Here's a message");
             return Ok();
         }
 
@@ -36,6 +36,7 @@ namespace medtracker.Controllers
         public IActionResult GetAuthTokens(AuthResponseDTO response)
         {
             repository.SetValue(response.team_id, response);
+            var result = repository.GetValue(response.team_id);
             return Ok();
         }
         /*

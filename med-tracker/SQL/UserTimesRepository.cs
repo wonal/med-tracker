@@ -41,12 +41,11 @@ namespace medtracker.SQL
             }
         }
 
-        public IEnumerable<string> GetUsers(string time)
+        public IEnumerable<UserTeamDTO> GetUsers(string time)
         {
             using (var connection = new SqliteConnection(connectionString))
             {
-                //return JsonConvert.DeserializeObject<List<UserTeamDTO>>(connection.Query<string>(@"select UserId, TeamId from UserTimes where Time = (@Time)", new { Time = time }).ToList());
-                return connection.Query<string>(@"select UserId from UserTimes where Time = (@Time)", new { Time = time });
+                return (connection.Query<UserTeamDTO>(@"select UserId, TeamId from UserTimes where Time = (@Time)", new { Time = time }));
             }
         }
     }
