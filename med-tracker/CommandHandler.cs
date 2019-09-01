@@ -20,9 +20,8 @@ namespace medtracker
                 string unFormattedTime = command.text.Split("@").ToList()[1];
                 if (DateTime.TryParse(unFormattedTime, out DateTime parsedTime))
                 {
-                    string time = parsedTime.ToString("HH:mm");
                     string userTime = parsedTime.ToString("hh:mm tt");
-                    userPreferences.SetUserTime(command.user_id, command.team_id, time);
+                    userPreferences.SetUserTime(command.user_id, command.team_id, Utilities.CalculateMinutes(parsedTime));
                     return $"You're all set!  I'll ping you each day at {userTime}";
                 }
                 else return $"{unFormattedTime} is an invalid format for time";

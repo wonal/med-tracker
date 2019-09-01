@@ -25,12 +25,12 @@ namespace medtracker.SQL
         {
             using (var connection = new SqliteConnection(connectionString))
             {
-                connection.Execute("create table if not exists UserTimes (UserId varchar(10), TeamId varchar (10), Time varchar(6), primary key (UserId, TeamId));" +
+                connection.Execute("create table if not exists UserTimes (UserId varchar(10), TeamId varchar (10), Time integer, primary key (UserId, TeamId));" +
                                    "create unique index if not exists UserIndex on UserTimes (UserId, TeamId)");
             }
         }
 
-        public void SetUserTime(string userID, string teamID, string time)
+        public void SetUserTime(string userID, string teamID, int time)
         {
             lock(dbLockObject)
             {
@@ -41,11 +41,11 @@ namespace medtracker.SQL
             }
         }
 
-        public IEnumerable<UserTeamDTO> GetUsers(string time)
+        public IEnumerable<UserTeamDTO> GetUsers(int time1, int time2)
         {
             using (var connection = new SqliteConnection(connectionString))
             {
-                return (connection.Query<UserTeamDTO>(@"select UserId, TeamId from UserTimes where Time = (@Time)", new { Time = time }));
+                return (connection.Query<UserTeamDTO>(@"select UserId, TeamId from UserTimes where Time >= (@Time1) and Time < (@Time2)", new { Time1 = time1, Time2 = time2 }));
             }
         }
     }
