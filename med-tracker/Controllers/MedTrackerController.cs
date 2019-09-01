@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using medtracker.Config;
-using medtracker.DTOs;
+﻿using medtracker.DTOs;
 using medtracker.SQL;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace medtracker.Controllers
 {
@@ -14,21 +8,18 @@ namespace medtracker.Controllers
     [ApiController]
     public class MedTrackerController : ControllerBase
     {
-        private readonly SlackAPI client;
         private readonly CredentialsRepository repository;
         private readonly CommandHandler handler;
-        public MedTrackerController(SlackAPI client, CommandHandler handler, CredentialsRepository repository)
+        public MedTrackerController(CommandHandler handler, CredentialsRepository repository)
         {
-            this.client = client;
             this.handler = handler;
             this.repository = repository;
         }
 
         // GET api/medtracker
         [HttpGet]
-        public IActionResult TestMessage()
+        public IActionResult HealthCheck()
         {
-            //await client.SendMessage("<token>", "<channel>", "Here's a message");
             return Ok();
         }
 
@@ -36,9 +27,9 @@ namespace medtracker.Controllers
         public IActionResult GetAuthTokens(AuthResponseDTO response)
         {
             repository.SetValue(response.team_id, response);
-            var result = repository.GetValue(response.team_id);
             return Ok();
         }
+
         /*
         [HttpGet("slackaccess")]
         public async Task<IActionResult> GetAuthTokens(string code)
