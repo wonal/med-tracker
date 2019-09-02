@@ -1,6 +1,9 @@
 ﻿using medtracker.DTOs;
 using medtracker.SQL;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace medtracker.Controllers
 {
@@ -10,16 +13,30 @@ namespace medtracker.Controllers
     {
         private readonly CredentialsRepository repository;
         private readonly CommandHandler handler;
-        public MedTrackerController(CommandHandler handler, CredentialsRepository repository)
+        private readonly SlackAPI slackApi;
+        public MedTrackerController(CommandHandler handler, CredentialsRepository repository, SlackAPI slackApi)
         {
             this.handler = handler;
             this.repository = repository;
+            this.slackApi = slackApi;
         }
 
         // GET api/medtracker
         [HttpGet]
         public IActionResult HealthCheck()
         {
+            return Ok();
+        }
+
+        [HttpPost("event")]
+        public async Task<IActionResult> EventTriggered(EventDTO eventData)
+        {
+
+            if (eventData.eventType.type == "message" && eventData.eventType.text.Contains("hello world"))
+            {
+                var token = repository.GetValue(eventData.team_id).bot.bot_access_token;
+                await slackApi.SendMessage(token, eventData.eventType.channel, "Your message was received!");
+            }
             return Ok();
         }
 

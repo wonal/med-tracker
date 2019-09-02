@@ -29,7 +29,7 @@ namespace medtracker.SQL
         {
             using (var connection = new SqliteConnection(connectionString))
             {
-                return connection.Query<AuthResponseDTO>(@"select Credentials from TeamCredentials where TeamID = (@Key)", new { Key = teamID }).First();
+                return JsonConvert.DeserializeObject<AuthResponseDTO>(connection.Query<string>(@"select Credentials from TeamCredentials where TeamID = (@Key)", new { Key = teamID }).First());
             }
         }
 
