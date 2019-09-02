@@ -36,4 +36,14 @@ namespace medtracker.DTOs
         public string userID { get; set; }
         public string teamID { get; set; }
     }
+
+    public class DataDTO
+    {
+        public string userID { get; set; }
+        public string teamID { get; set; }
+        public long date { get; set; }
+        public bool ha_present { get; set; }
+        public int num_maxalt { get; set; }
+        public int num_aleve { get; set; }
+    }
 }

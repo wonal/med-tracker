@@ -30,6 +30,7 @@ namespace medtracker
             services.AddSingleton(Configuration);
             services.AddSingleton<CredentialsRepository>();
             services.AddSingleton<UserTimesRepository>();
+            services.AddSingleton<DataRepository>();
             services.AddSingleton<CommandHandler>();
             services.AddTransient<SlackAPI>();
             services.AddSingleton<IHostedService, BackgroundService>();
@@ -54,6 +55,8 @@ namespace medtracker
                 context.CreateTableIfNotExists();
                 var userTimeContext = serviceScope.ServiceProvider.GetRequiredService<UserTimesRepository>();
                 userTimeContext.CreateTableIfNotExists();
+                var dataContext = serviceScope.ServiceProvider.GetRequiredService<DataRepository>();
+                dataContext.CreateTableIfNotExists();
             }
         }
     }
