@@ -15,9 +15,10 @@ namespace medtracker
 
         public string ParseCommand(SlashCommandDTO command)
         {
-            if (command.text.ToLower().Contains("ping me @"))
+            if (command.text.ToLower().Contains("ping me at"))
             {
-                string unFormattedTime = command.text.Split("@").ToList()[1];
+                var pingCommand = command.text.Split("at").ToList();
+                string unFormattedTime = pingCommand.Count() == 2 ? pingCommand[1] : "";
                 if (DateTime.TryParse(unFormattedTime, out DateTime parsedTime))
                 {
                     string userTime = parsedTime.ToString("hh:mm tt");
