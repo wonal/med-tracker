@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace medtracker.SQL
 {
-    public class CredentialsRepository : IRepository<AuthResponseDTO>
+    public class CredentialsRepository
     {
         private readonly object dbLockObject = new object();
         private readonly string connectionString;

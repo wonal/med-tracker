@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace medtracker
 {
-    public class SlackAPI : ISlackAPI
+    public class SlackAPI 
     {
         private readonly HttpClient client;
         public SlackAPI()
