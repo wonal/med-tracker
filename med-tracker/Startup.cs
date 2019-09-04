@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using medtracker.Infrastructure;
 using medtracker.SQL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +33,8 @@ namespace medtracker
             services.AddSingleton<UserTimesRepository>();
             services.AddSingleton<DataRepository>();
             services.AddSingleton<CommandHandler>();
+            services.AddSingleton<UserAlert>();
+            services.AddSingleton<UserRecord>();
             services.AddTransient<SlackAPI>();
             services.AddSingleton<IHostedService, BackgroundService>();
         }
