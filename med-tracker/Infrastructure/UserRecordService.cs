@@ -5,11 +5,11 @@ using System;
 
 namespace medtracker.Infrastructure
 {
-    public class UserRecord
+    public class UserRecordService
     {
         private readonly IDataRepository dataRepository;
 
-        public UserRecord(IDataRepository dataRepository)
+        public UserRecordService(IDataRepository dataRepository)
         {
             this.dataRepository = dataRepository;
         }

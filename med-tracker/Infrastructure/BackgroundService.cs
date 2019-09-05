@@ -29,7 +29,7 @@ namespace medtracker
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            timer = new Timer(SendAlerts, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));  //15 seconds just for testing
+            timer = new Timer(SendAlerts, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));  
             return Task.CompletedTask;
         }
 

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace medtracker.Infrastructure
 {
-    public class UserAlert
+    public class UserAlertService
     {
         private readonly IUserTimesRepository userTimes;
 
-        public UserAlert(IUserTimesRepository userTimes)
+        public UserAlertService(IUserTimesRepository userTimes)
         {
             this.userTimes = userTimes;
         }

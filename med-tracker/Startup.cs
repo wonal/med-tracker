@@ -33,8 +33,8 @@ namespace medtracker
             services.AddSingleton<IUserTimesRepository, UserTimesRepository>();
             services.AddSingleton<IDataRepository, DataRepository>();
             services.AddSingleton<CommandHandler>();
-            services.AddSingleton<UserAlert>();
-            services.AddSingleton<UserRecord>();
+            services.AddSingleton<UserAlertService>();
+            services.AddSingleton<UserRecordService>();
             services.AddTransient<SlackAPI>();
             services.AddSingleton<IHostedService, BackgroundService>();
         }
