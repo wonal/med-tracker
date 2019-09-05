@@ -30,8 +30,8 @@ namespace medtracker
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton(Configuration);
             services.AddSingleton<CredentialsRepository>();
-            services.AddSingleton<UserTimesRepository>();
-            services.AddSingleton<DataRepository>();
+            services.AddSingleton<IUserTimesRepository, UserTimesRepository>();
+            services.AddSingleton<IDataRepository, DataRepository>();
             services.AddSingleton<CommandHandler>();
             services.AddSingleton<UserAlert>();
             services.AddSingleton<UserRecord>();
@@ -56,9 +56,9 @@ namespace medtracker
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<CredentialsRepository>();
                 context.CreateTableIfNotExists();
-                var userTimeContext = serviceScope.ServiceProvider.GetRequiredService<UserTimesRepository>();
+                var userTimeContext = serviceScope.ServiceProvider.GetRequiredService<IUserTimesRepository>();
                 userTimeContext.CreateTableIfNotExists();
-                var dataContext = serviceScope.ServiceProvider.GetRequiredService<DataRepository>();
+                var dataContext = serviceScope.ServiceProvider.GetRequiredService<IDataRepository>();
                 dataContext.CreateTableIfNotExists();
             }
         }
