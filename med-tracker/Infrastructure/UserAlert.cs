@@ -9,9 +9,9 @@ namespace medtracker.Infrastructure
 {
     public class UserAlert
     {
-        private readonly UserTimesRepository userTimes;
+        private readonly IUserTimesRepository userTimes;
 
-        public UserAlert(UserTimesRepository userTimes)
+        public UserAlert(IUserTimesRepository userTimes)
         {
             this.userTimes = userTimes;
         }

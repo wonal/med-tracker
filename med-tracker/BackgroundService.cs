@@ -14,10 +14,10 @@ namespace medtracker
         private int currentTime;
         private int nextAlarm;
         private readonly SlackAPI slackAPI;
-        private readonly UserTimesRepository userPreferences;
+        private readonly IUserTimesRepository userPreferences;
         private readonly CredentialsRepository credentials;
 
-        public BackgroundService(SlackAPI slackAPI, UserTimesRepository userPreferences, CredentialsRepository credentials)
+        public BackgroundService(SlackAPI slackAPI, IUserTimesRepository userPreferences, CredentialsRepository credentials)
         {
             this.slackAPI = slackAPI;
             this.userPreferences = userPreferences;

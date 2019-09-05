@@ -9,7 +9,6 @@ namespace medtracker.SQL
 {
     public class CredentialsRepository
     {
-        private readonly object dbLockObject = new object();
         private readonly string connectionString;
 
         public CredentialsRepository(IConfiguration config)
@@ -35,12 +34,9 @@ namespace medtracker.SQL
 
         public void SetValue(string teamID, AuthResponseDTO response)
         {
-            lock(dbLockObject)
+            using (var connection = new SqliteConnection(connectionString))
             {
-                using (var connection = new SqliteConnection(connectionString))
-                {
-                    connection.Execute(@"insert or replace into TeamCredentials (TeamID, Credentials) values (@TeamID, @Credentials)", new { TeamID = teamID, Credentials = JsonConvert.SerializeObject(response) });
-                }
+                connection.Execute(@"insert or replace into TeamCredentials (TeamID, Credentials) values (@TeamID, @Credentials)", new { TeamID = teamID, Credentials = JsonConvert.SerializeObject(response) });
             }
         }
     }

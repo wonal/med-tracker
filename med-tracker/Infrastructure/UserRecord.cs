@@ -7,9 +7,9 @@ namespace medtracker.Infrastructure
 {
     public class UserRecord
     {
-        private readonly DataRepository dataRepository;
+        private readonly IDataRepository dataRepository;
 
-        public UserRecord(DataRepository dataRepository)
+        public UserRecord(IDataRepository dataRepository)
         {
             this.dataRepository = dataRepository;
         }

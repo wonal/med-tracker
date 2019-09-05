@@ -10,9 +10,8 @@ using System.Threading.Tasks;
 
 namespace medtracker.SQL
 {
-    public class UserTimesRepository
+    public class UserTimesRepository : IUserTimesRepository
     {
-        private readonly object dbLockObject = new object();
         private readonly string connectionString;
 
         public UserTimesRepository(IConfiguration config)
@@ -32,12 +31,9 @@ namespace medtracker.SQL
 
         public void SetUserTime(string userID, string teamID, int time)
         {
-            lock(dbLockObject)
+            using (var connection = new SqliteConnection(connectionString))
             {
-                using (var connection = new SqliteConnection(connectionString))
-                {
-                    connection.Execute(@"replace into UserTimes (UserId, TeamId, Time) values (@UserId, @TeamId, @Time)", new { UserId = userID, TeamId = teamID, Time = time });
-                }
+                connection.Execute(@"replace into UserTimes (UserId, TeamId, Time) values (@UserId, @TeamId, @Time)", new { UserId = userID, TeamId = teamID, Time = time });
             }
         }
 
