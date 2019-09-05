@@ -1,12 +1,8 @@
 ﻿using Dapper;
-using medtracker.DTOs;
+using medtracker.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace medtracker.SQL
 {
@@ -37,11 +33,26 @@ namespace medtracker.SQL
             }
         }
 
-        public IEnumerable<UserTeamDTO> GetUsers(int time1, int time2)
+        public IEnumerable<UserTeam> GetUsers(int time1, int time2)
         {
             using (var connection = new SqliteConnection(connectionString))
             {
-                return (connection.Query<UserTeamDTO>(@"select UserId, TeamId from UserTimes where Time >= (@Time1) and Time < (@Time2)", new { Time1 = time1, Time2 = time2 }));
+                return (connection.Query<UserTeam>(@"select UserId, TeamId from UserTimes where Time >= (@Time1) and Time < (@Time2)", new { Time1 = time1, Time2 = time2 }));
+            }
+        }
+
+        public IEnumerable<int> GetUserTime(string userID, string teamID)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                return connection.Query<int>(@"select Time from UserTimes where UserId = (@userID) and TeamId = (@teamID)", new { userID, teamID });
+            }
+        }
+        public void DeleteUserTime(string userID, string teamID)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Execute(@"delete from UserTimes where UserId = (@userID) and TeamId = (@teamID)", new { userID, teamID });
             }
         }
     }

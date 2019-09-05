@@ -29,6 +29,12 @@ namespace medtracker
                 if (recordResult.Error) return $"Sorry, '{recordResult.ResultMessage}' is in an invalid format";
                 else return $"Data saved for {recordResult.ResultMessage}";
             }
+            else if (cmd.Contains("stop"))
+            {
+                CommandResult stopResult = userAlert.DeleteUserAlert(cmd, command.user_id, command.team_id);
+                if (stopResult.Error) return $"{stopResult.ResultMessage}";
+                else return "Noted! I'll stop pinging you starting today.";
+            }
             return $"Sorry, I do not understand the command '{command.text}'";
         }
     }

@@ -27,5 +27,17 @@ namespace medtracker.Infrastructure
             }
             return new CommandResult { Error = true, ResultMessage = unParsedTime };
         }
+
+        public CommandResult DeleteUserAlert(string commandText, string userID, string teamID)
+        {
+            if (commandText != "stop") return new CommandResult { Error = true, ResultMessage = commandText };
+
+            if (userTimes.GetUserTime(userID, teamID).Count() == 1)
+            {
+                userTimes.DeleteUserTime(userID, teamID);
+                return new CommandResult { Error = false, ResultMessage = commandText };
+            }
+            else return new CommandResult { Error = true, ResultMessage = "No alert set up yet" };
+        }
     }
 }

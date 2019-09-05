@@ -1,4 +1,5 @@
 ﻿using medtracker.DTOs;
+using medtracker.Models;
 using medtracker.SQL;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -28,7 +29,7 @@ namespace medtracker
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            timer = new Timer(SendAlerts, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            timer = new Timer(SendAlerts, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));  //15 seconds just for testing
             return Task.CompletedTask;
         }
 
@@ -37,7 +38,7 @@ namespace medtracker
             var users = userPreferences.GetUsers(currentTime, nextAlarm);
             if (users.Count() > 0)
             {
-                foreach (UserTeamDTO ut in users)
+                foreach (UserTeam ut in users)
                 {
                     AuthResponseDTO teamInfo = credentials.GetValue(ut.teamID);
                     await slackAPI.SendMessage(teamInfo.bot.bot_access_token, ut.userID, $"Your alert!");
