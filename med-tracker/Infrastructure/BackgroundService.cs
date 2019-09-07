@@ -13,7 +13,6 @@ namespace medtracker
     {
         private Timer timer;
         private int currentTime;
-        private int nextAlarm;
         private readonly SlackAPI slackAPI;
         private readonly IUserTimesRepository userPreferences;
         private readonly CredentialsRepository credentials;
@@ -23,8 +22,7 @@ namespace medtracker
             this.slackAPI = slackAPI;
             this.userPreferences = userPreferences;
             this.credentials = credentials;
-            currentTime = Utilities.CalculateMinutes(DateTime.Now);
-            nextAlarm = currentTime + 1;
+            currentTime = Utilities.CalculateSeconds(DateTime.Now);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -35,17 +33,14 @@ namespace medtracker
 
         private async void SendAlerts(Object state)
         {
+            var nextAlarm = Utilities.CalculateSeconds(DateTime.Now);
             var users = userPreferences.GetUsers(currentTime, nextAlarm);
-            if (users.Count() > 0)
+            foreach (UserTeam ut in users)
             {
-                foreach (UserTeam ut in users)
-                {
-                    AuthResponseDTO teamInfo = credentials.GetValue(ut.teamID);
-                    await slackAPI.SendMessage(teamInfo.bot.bot_access_token, ut.userID, $"Your alert!");
-                }
+                AuthResponseDTO teamInfo = credentials.GetValue(ut.teamID);
+                await slackAPI.SendMessage(teamInfo.bot.bot_access_token, ut.userID, $"Your alert!");
             }
             currentTime = nextAlarm;
-            nextAlarm += 1;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

@@ -4,9 +4,9 @@ namespace medtracker
 {
     public class Utilities
     {
-        public static int CalculateMinutes (DateTime time)
+        public static int CalculateSeconds (DateTime time)
         {
-            return (60 * time.Hour) + time.Minute;
+            return (60 * 60 * time.Hour) + (time.Minute*60) + time.Second;
         }
     }
 }

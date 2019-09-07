@@ -22,7 +22,7 @@ namespace medtracker.Infrastructure
             string unParsedTime = pingCommand.Count() == 2 ? pingCommand[1] : "";
             if (DateTime.TryParse(unParsedTime, out DateTime parsedTime))
             {
-                userTimes.SetUserTime(userID, teamID, Utilities.CalculateMinutes(parsedTime));
+                userTimes.SetUserTime(userID, teamID, Utilities.CalculateSeconds(parsedTime));
                 return new CommandResult { Error = false, ResultMessage = parsedTime.ToString("hh:mm tt") };
             }
             return new CommandResult { Error = true, ResultMessage = unParsedTime };
