@@ -1,4 +1,5 @@
-﻿using medtracker.DTOs;
+﻿using medtracker.Config;
+using medtracker.DTOs;
 using medtracker.Infrastructure;
 using medtracker.Models;
 
@@ -28,6 +29,10 @@ namespace medtracker
                 CommandResult recordResult = userRecordService.StoreRecord(cmd, command.user_id, command.team_id);
                 if (recordResult.Error) return $"Sorry, '{recordResult.ResultMessage}' is in an invalid format";
                 else return $"Data saved for {recordResult.ResultMessage}";
+            }
+            else if (cmd == ("month"))
+            {
+                return userRecordService.RetrieveMonthsRecords(command.user_id, command.team_id).ResultMessage;
             }
             else if (cmd.Contains("stop"))
             {

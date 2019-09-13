@@ -40,5 +40,14 @@ namespace medtracker.SQL
                     new { userID, teamID });
             }
         }
+
+        public IEnumerable<DataDTO> RetrieveMonthlyRecords(string userID, string teamID, long startDateInSeconds)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                return connection.Query<DataDTO>("select * from Data where UserId = (@userID) and TeamId = (@teamID) order by Date", 
+                    new { userID, teamID});
+            }
+        }
     }
 }

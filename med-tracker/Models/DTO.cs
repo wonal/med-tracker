@@ -1,5 +1,6 @@
 ﻿
 using Newtonsoft.Json;
+using System;
 
 namespace medtracker.DTOs
 {
@@ -61,4 +62,18 @@ namespace medtracker.DTOs
         public string type { get; set; }
     }
 
+    public class UserRecordDTO
+    {
+        public string Date { get; set; }
+        public bool HA_Present { get; set; }
+        public int Num_Maxalt { get; set; }
+        public int Num_Aleve { get; set; }
+    }
+
+    public class RecordRequestDTO
+    {
+        public string Password { get; set; }
+        public string UserID { get; set; }
+        public string TeamID { get; set; }
+    }
 }

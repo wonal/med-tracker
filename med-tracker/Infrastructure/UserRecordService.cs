@@ -1,7 +1,10 @@
 ﻿using medtracker.DTOs;
 using medtracker.Models;
 using medtracker.SQL;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace medtracker.Infrastructure
 {
@@ -48,5 +51,20 @@ namespace medtracker.Infrastructure
             return false;
         }
 
+        public CommandResult RetrieveMonthsRecords(string userID, string teamID)
+        {
+            DateTime now = DateTime.Now;
+            DateTime firstOfMonth = new DateTime(now.Year, now.Month, 1);
+            long dayInSeconds = new DateTimeOffset(firstOfMonth).ToUnixTimeSeconds();
+            var results = dataRepository.RetrieveMonthlyRecords(userID, teamID, dayInSeconds).Select(
+                r => new UserRecordDTO {
+                    Date = DateTimeOffset.FromUnixTimeSeconds(r.date).ToString("g"),
+                    HA_Present = r.ha_present,
+                    Num_Maxalt = r.num_maxalt,
+                    Num_Aleve = r.num_aleve });
+
+            if (results.Count() == 0) return new CommandResult { Error = true, ResultMessage = "No results available." };
+            return new CommandResult { Error = false, ResultMessage = JsonConvert.SerializeObject(results) };
+        }
     }
 }

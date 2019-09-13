@@ -1,5 +1,7 @@
-﻿using medtracker.DTOs;
+﻿using medtracker.Config;
+using medtracker.DTOs;
 using medtracker.SQL;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
@@ -70,6 +72,14 @@ namespace medtracker.Controllers
             */
             string response = handler.ParseCommand(slashCommand);
             return Ok(response);
+        }
+
+        [HttpPost("rawdata")]
+        public IActionResult RawMonthRecords([FromForm] RecordRequestDTO request)
+        {
+            string token = Request.Headers["Authorization"];
+            if (token != $"Bearer {ClientKeys.password}") return BadRequest();
+            return Ok(handler.ParseCommand(new SlashCommandDTO { text = "month", user_id = request.UserID, team_id = request.TeamID }));
         }
     }
 }
