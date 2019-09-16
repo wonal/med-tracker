@@ -39,15 +39,52 @@ namespace medtracker.Infrastructure
             else return new CommandResult { Error = true, ResultMessage = commandText };
         }
 
+        public CommandResult UpdateRecord(string commandText, string userID, string teamID)
+        {
+            var entries = commandText.Split(" ");
+            if (ValidRecord(entries))
+            {
+                dataRepository.SetData(new DataDTO
+                {
+                    userID = userID,
+                    teamID = teamID,
+                    date = new DateTimeOffset(DateTime.Parse(entries[1])).ToUnixTimeSeconds(),
+                    ha_present = entries[2] == "yes" ? true : false,
+                    num_maxalt = Int32.Parse(entries[3]),
+                    num_aleve = Int32.Parse(entries[4])
+                });
+                return new CommandResult { Error = false, ResultMessage = entries[1] };
+            }
+            return new CommandResult { Error = true, ResultMessage = commandText };
+        }
+
         private bool ValidRecord(string [] entries)
         {
-            if (entries.Length != 4) return false;
-            if(Int32.TryParse(entries[2], out int maxalt) && Int32.TryParse(entries[3], out int aleve))
-            {
-                return entries[0] == "record" && (entries[1] == "yes" || entries[1] == "no") &&
-                    maxalt >= 0 && aleve >= 0;
+            if (entries.Length != 4 && entries.Length != 5) return false;
 
+            string maxalt = "";
+            string aleve = "";
+            string ha_present = "";
+
+            if (entries.Length == 4)
+            {
+                ha_present = entries[1];
+                maxalt = entries[2];
+                aleve = entries[3];
             }
+            if (entries.Length == 5)
+            {
+                ha_present = entries[2];
+                maxalt = entries[3];
+                aleve = entries[4];
+                if (!DateTime.TryParse(entries[1], out DateTime date)) return false;
+            }
+
+            if (Int32.TryParse(maxalt, out int num_maxalt) && Int32.TryParse(aleve, out int num_aleve))
+            {
+                return (ha_present == "yes" || ha_present == "no") && num_maxalt >= 0 && num_aleve >= 0;
+            }
+
             return false;
         }
 
@@ -58,7 +95,7 @@ namespace medtracker.Infrastructure
             long dayInSeconds = new DateTimeOffset(firstOfMonth).ToUnixTimeSeconds();
             var results = dataRepository.RetrieveMonthlyRecords(userID, teamID, dayInSeconds).Select(
                 r => new UserRecordDTO {
-                    Date = DateTimeOffset.FromUnixTimeSeconds(r.date).ToString("g"),
+                    Date = DateTimeOffset.FromUnixTimeSeconds(r.date).ToString("d"),
                     HA_Present = r.ha_present,
                     Num_Maxalt = r.num_maxalt,
                     Num_Aleve = r.num_aleve });
