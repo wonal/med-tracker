@@ -11,4 +11,12 @@ namespace medtracker.Models
         public string userID { get; set; }
         public string teamID { get; set; }
     }
+
+    public class MonthStats
+    {
+        public int TotalHA { get; set; }
+        public int TotalMaxalt { get; set; }
+        public decimal AvgMaxalt { get; set; }
+        public decimal AvgAleve { get; set; }
+    }
 }

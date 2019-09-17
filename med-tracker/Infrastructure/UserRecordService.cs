@@ -90,10 +90,7 @@ namespace medtracker.Infrastructure
 
         public CommandResult RetrieveMonthsRecords(string userID, string teamID)
         {
-            DateTime now = DateTime.Now;
-            DateTime firstOfMonth = new DateTime(now.Year, now.Month, 1);
-            long dayInSeconds = new DateTimeOffset(firstOfMonth).ToUnixTimeSeconds();
-            var results = dataRepository.RetrieveMonthlyRecords(userID, teamID, dayInSeconds).Select(
+            var results = RetrieveCurrentMonth(userID, teamID).Select(
                 r => new UserRecordDTO {
                     Date = DateTimeOffset.FromUnixTimeSeconds(r.date).ToString("d"),
                     HA_Present = r.ha_present,
@@ -102,6 +99,23 @@ namespace medtracker.Infrastructure
 
             if (results.Count() == 0) return new CommandResult { Error = true, ResultMessage = "No results available." };
             return new CommandResult { Error = false, ResultMessage = JsonConvert.SerializeObject(results) };
+        }
+
+        public CommandResult RetrieveMonthStats(string userID, string teamID)
+        {
+            var results = RetrieveCurrentMonth(userID, teamID);
+            if (results.Count() == 0) return new CommandResult { Error = true, ResultMessage = "No results available." };
+            var resultObj = DataService.CalculateMonthlyStats(results);
+            var resultMessage = $"Stats for the month.  Total # of headaches: {resultObj.TotalHA}, Total # Maxalt taken: {resultObj.TotalMaxalt} (Avg {resultObj.AvgMaxalt} per week), Avg Aleve per week: {resultObj.AvgAleve}";
+            return new CommandResult { Error = false, ResultMessage = resultMessage };
+        }
+
+        private IEnumerable<DataDTO> RetrieveCurrentMonth(string userID, string teamID)
+        {
+            DateTime now = DateTime.Now;
+            DateTime firstOfMonth = now.Day == 1 ? new DateTime(now.Year, (now.Month == 1 ? 12 : now.Month - 1), 1) : new DateTime(now.Year, now.Month, 1);
+            long dayInSeconds = new DateTimeOffset(firstOfMonth).ToUnixTimeSeconds();
+            return dataRepository.RetrieveMonthlyRecords(userID, teamID, dayInSeconds);
         }
     }
 }

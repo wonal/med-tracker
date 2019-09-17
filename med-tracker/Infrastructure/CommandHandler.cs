@@ -36,7 +36,11 @@ namespace medtracker
                 if (recordResult.Error) return $"Sorry, '{recordResult.ResultMessage}' is in an invalid format";
                 else return $"Data updated for {recordResult.ResultMessage}";
             }
-            else if (cmd == ("month"))
+            else if (cmd == "stats")
+            {
+                return userRecordService.RetrieveMonthStats(command.user_id, command.team_id).ResultMessage;
+            }
+            else if (cmd == ("raw"))
             {
                 return userRecordService.RetrieveMonthsRecords(command.user_id, command.team_id).ResultMessage;
             }

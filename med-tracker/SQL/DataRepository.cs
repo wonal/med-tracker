@@ -45,8 +45,8 @@ namespace medtracker.SQL
         {
             using (var connection = new SqliteConnection(connectionString))
             {
-                return connection.Query<DataDTO>("select * from Data where UserId = (@userID) and TeamId = (@teamID) order by Date", 
-                    new { userID, teamID});
+                return connection.Query<DataDTO>("select * from Data where UserId = (@userID) and TeamId = (@teamID) and Date >= (@startDateInSeconds) order by Date", 
+                    new { userID, teamID, startDateInSeconds});
             }
         }
     }
