@@ -3,21 +3,22 @@ using medtracker.Models;
 using medtracker.SQL;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace medtracker
+namespace medtracker.Infrastructure
 {
-    public class BackgroundService : IHostedService, IDisposable
+
+    public class BackgroundAlertService : BackgroundService
     {
-        private Timer timer;
         private int currentTime;
         private readonly SlackAPI slackAPI;
         private readonly IUserTimesRepository userPreferences;
         private readonly CredentialsRepository credentials;
 
-        public BackgroundService(SlackAPI slackAPI, IUserTimesRepository userPreferences, CredentialsRepository credentials)
+        public BackgroundAlertService(SlackAPI slackAPI, IUserTimesRepository userPreferences, CredentialsRepository credentials)
         {
             this.slackAPI = slackAPI;
             this.userPreferences = userPreferences;
@@ -25,13 +26,16 @@ namespace medtracker
             currentTime = Utilities.CalculateSeconds(DateTime.Now);
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            timer = new Timer(SendAlerts, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));  
-            return Task.CompletedTask;
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                await SendAlerts();
+                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+            }
         }
 
-        private async void SendAlerts(Object state)
+        private async Task SendAlerts()
         {
             var nextAlarm = Utilities.CalculateSeconds(DateTime.Now);
             var users = userPreferences.GetUsers(currentTime, nextAlarm);
@@ -41,20 +45,6 @@ namespace medtracker
                 await slackAPI.SendMessage(teamInfo.bot.bot_access_token, ut.userID, $"Your alert!");
             }
             currentTime = nextAlarm;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            if (timer != null)
-            {
-                timer.Change(Timeout.Infinite, 0);
-            }
-            return Task.CompletedTask;
-        }
-
-        public void Dispose()
-        {
-            if(timer != null) timer.Dispose();
         }
     }
 }

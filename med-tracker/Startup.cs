@@ -36,7 +36,7 @@ namespace medtracker
             services.AddSingleton<UserAlertService>();
             services.AddSingleton<UserRecordService>();
             services.AddTransient<SlackAPI>();
-            services.AddSingleton<IHostedService, BackgroundService>();
+            services.AddSingleton<IHostedService, BackgroundAlertService>();
         }
 
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
