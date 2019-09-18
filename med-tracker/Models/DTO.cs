@@ -1,6 +1,4 @@
 ﻿
-using Newtonsoft.Json;
-using System;
 
 namespace medtracker.DTOs
 {
@@ -43,23 +41,6 @@ namespace medtracker.DTOs
         public bool ha_present { get; set; }
         public int num_maxalt { get; set; }
         public int num_aleve { get; set; }
-    }
-    public class ContentDTO
-    {
-        public string type { get; set;}
-        public string channel { get; set; }
-        public string user { get; set; }
-        public string text { get; set; }
-        public string ts { get; set; }
-    }
-
-    public class EventDTO
-    {
-        public string team_id { get; set; }
-
-        [JsonProperty("event")]
-        public ContentDTO eventType { get; set; }
-        public string type { get; set; }
     }
 
     public class UserRecordDTO
