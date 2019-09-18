@@ -40,11 +40,11 @@ namespace medtracker
             {
                 return userRecordService.RetrieveMonthStats(command.user_id, command.team_id).ResultMessage;
             }
-            else if (cmd == ("raw"))
+            else if (cmd == "raw")
             {
                 return userRecordService.RetrieveMonthsRecords(command.user_id, command.team_id).ResultMessage;
             }
-            else if (cmd.Contains("stop"))
+            else if (cmd == "stop")
             {
                 CommandResult stopResult = userAlertService.DeleteUserAlert(cmd, command.user_id, command.team_id);
                 if (stopResult.Error) return $"{stopResult.ResultMessage}";

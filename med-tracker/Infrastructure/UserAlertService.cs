@@ -30,9 +30,7 @@ namespace medtracker.Infrastructure
 
         public CommandResult DeleteUserAlert(string commandText, string userID, string teamID)
         {
-            if (commandText != "stop") return new CommandResult { Error = true, ResultMessage = commandText };
-
-            if (userTimes.GetUserTime(userID, teamID).Count() == 1)
+            if (userTimes.GetUserTime(userID, teamID).Any())
             {
                 userTimes.DeleteUserTime(userID, teamID);
                 return new CommandResult { Error = false, ResultMessage = commandText };
