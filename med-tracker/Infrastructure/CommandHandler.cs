@@ -40,7 +40,7 @@ namespace medtracker
             {
                 return userRecordService.RetrieveMonthStats(command.user_id, command.team_id).ResultMessage;
             }
-            else if (cmd == "raw")
+            else if (cmd == Constants.rawDataCmd)
             {
                 return userRecordService.RetrieveMonthsRecords(command.user_id, command.team_id).ResultMessage;
             }

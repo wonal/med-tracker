@@ -64,7 +64,7 @@ namespace medtracker.Controllers
         {
             string token = Request.Headers["Authorization"];
             if (token != $"Bearer {ClientKeys.password}") return BadRequest();
-            return Ok(handler.ParseCommand(new SlashCommandDTO { text = "month", user_id = request.UserID, team_id = request.TeamID }));
+            return Ok(handler.ParseCommand(new SlashCommandDTO { text = Constants.rawDataCmd, user_id = request.UserID, team_id = request.TeamID }));
         }
     }
 }
