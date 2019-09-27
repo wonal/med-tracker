@@ -42,10 +42,16 @@ namespace medtracker.Infrastructure
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                //todo: add try/catch/finally with logging
-                await SendAlerts();
-                await SendReports();
-                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+                try
+                {
+                    await SendAlerts();
+                    await SendReports();
+                }
+                catch (Exception) { /*todo: add logging*/}
+                finally 
+                {
+                    await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+                }
             }
         }
 

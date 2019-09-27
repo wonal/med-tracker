@@ -73,9 +73,10 @@ namespace medtracker.Infrastructure
         public CommandResult RetrieveMonthStats(string userID, string teamID)
         {
             var results = RetrieveCurrentMonth(userID, teamID);
-            if (results.Count() == 0) return new CommandResult { Error = true, ResultMessage = "Monthly report: No results available." };
+            var month = Utilities.FormattedReportMonth(DateTime.Now);
+            if (results.Count() == 0) return new CommandResult { Error = true, ResultMessage = $"Monthly report for {month}: No results available." };
             var resultObj = DataService.CalculateMonthlyStats(results);
-            var resultMessage = $"Stats for the month.  Total # of headaches: {resultObj.TotalHA}, Total # Maxalt taken: {resultObj.TotalMaxalt} (Avg {resultObj.AvgMaxalt} per week), Avg Aleve per week: {resultObj.AvgAleve}";
+            var resultMessage = $"Stats for {month}.  Total # of headaches: {resultObj.TotalHA}, Total # Maxalt taken: {resultObj.TotalMaxalt} (Avg {resultObj.AvgMaxalt} per week), Avg Aleve per week: {resultObj.AvgAleve}";
             return new CommandResult { Error = false, ResultMessage = resultMessage };
         }
 
