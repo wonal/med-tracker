@@ -7,5 +7,6 @@ namespace medtracker.Config
         public const string redirect_uri = "https://medtracker.alliwong.com/api/medtracker/slackaccess";
         public const string scopes = "channels:read,chat:write:bot,incoming-webhook,bot,commands";
         public const string rawDataCmd = "raw";
+        public const int reportDay = 1;
     }
 }

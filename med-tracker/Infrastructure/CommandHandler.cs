@@ -36,6 +36,12 @@ namespace medtracker
                 if (recordResult.Error) return $"Sorry, '{recordResult.ResultMessage}' is in an invalid format";
                 else return $"Data updated for {recordResult.ResultMessage}";
             }
+            else if (cmd == "stop")
+            {
+                CommandResult stopResult = userAlertService.DeleteUserAlert(cmd, command.user_id, command.team_id);
+                if (stopResult.Error) return $"{stopResult.ResultMessage}";
+                else return "Noted! I'll stop pinging you starting today.";
+            }
             else if (cmd == "stats")
             {
                 return userRecordService.RetrieveMonthStats(command.user_id, command.team_id).ResultMessage;
@@ -44,11 +50,13 @@ namespace medtracker
             {
                 return userRecordService.RetrieveMonthsRecords(command.user_id, command.team_id).ResultMessage;
             }
-            else if (cmd == "stop")
+            else if (cmd == "subscribe")
             {
-                CommandResult stopResult = userAlertService.DeleteUserAlert(cmd, command.user_id, command.team_id);
-                if (stopResult.Error) return $"{stopResult.ResultMessage}";
-                else return "Noted! I'll stop pinging you starting today.";
+                return userAlertService.SetUpSubscription(command.user_id, command.team_id).ResultMessage;
+            }
+            else if (cmd == "unsubscribe")
+            {
+                return userAlertService.DeleteSubscription(command.user_id, command.team_id).ResultMessage;
             }
             return $"Sorry, I do not understand the command '{command.text}'";
         }
