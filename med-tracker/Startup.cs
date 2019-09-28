@@ -32,7 +32,7 @@ namespace medtracker
             services.AddSingleton<CredentialsRepository>();
             services.AddSingleton<ISubscriberRepository, SubscriberRepository>();
             services.AddSingleton<IUserTimesRepository, UserTimesRepository>();
-            services.AddSingleton<IDataRepository, DataRepository>();
+            services.AddSingleton<IUserDataRepository, UserDataRepository>();
             services.AddSingleton<CommandHandler>();
             services.AddSingleton<UserAlertService>();
             services.AddSingleton<UserRecordService>();
@@ -59,7 +59,7 @@ namespace medtracker
                 context.CreateTableIfNotExists();
                 var userTimeContext = serviceScope.ServiceProvider.GetRequiredService<IUserTimesRepository>();
                 userTimeContext.CreateTableIfNotExists();
-                var dataContext = serviceScope.ServiceProvider.GetRequiredService<IDataRepository>();
+                var dataContext = serviceScope.ServiceProvider.GetRequiredService<IUserDataRepository>();
                 dataContext.CreateTableIfNotExists();
                 var subscriberContext = serviceScope.ServiceProvider.GetRequiredService<ISubscriberRepository>();
                 subscriberContext.CreateTableIfNotExists();

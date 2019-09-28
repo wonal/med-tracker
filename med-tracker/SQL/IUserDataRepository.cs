@@ -3,7 +3,7 @@ using medtracker.DTOs;
 
 namespace medtracker.SQL
 {
-    public interface IDataRepository
+    public interface IUserDataRepository
     {
         void CreateTableIfNotExists();
         IEnumerable<DataDTO> RetrieveUserData(string userID, string teamID);

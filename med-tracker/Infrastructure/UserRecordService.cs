@@ -10,11 +10,11 @@ namespace medtracker.Infrastructure
 {
     public class UserRecordService
     {
-        private readonly IDataRepository dataRepository;
+        private readonly IUserDataRepository userDataRepository;
 
-        public UserRecordService(IDataRepository dataRepository)
+        public UserRecordService(IUserDataRepository userDataRepository)
         {
-            this.dataRepository = dataRepository;
+            this.userDataRepository = userDataRepository;
         }
 
         public CommandResult StoreRecord(string commandText, string userID, string teamID)
@@ -27,7 +27,7 @@ namespace medtracker.Infrastructure
             DateTime now = DateTime.Now;
             DateTime today = new DateTime(now.Year, now.Month, now.Day);
             long currentTime = new DateTimeOffset(today).ToUnixTimeSeconds();
-            dataRepository.SetData(new DataDTO
+            userDataRepository.SetData(new DataDTO
             {
                 userID = userID,
                 teamID = teamID,
@@ -46,7 +46,7 @@ namespace medtracker.Infrastructure
             if (record.Error)
                 return new CommandResult { Error = true, ResultMessage = commandText };
 
-            dataRepository.SetData(new DataDTO
+            userDataRepository.SetData(new DataDTO
             {
                 userID = userID,
                 teamID = teamID,
@@ -82,10 +82,8 @@ namespace medtracker.Infrastructure
 
         private IEnumerable<DataDTO> RetrieveCurrentMonth(string userID, string teamID)
         {
-            DateTime now = DateTime.Now;
-            DateTime firstOfMonth = now.Day == 1 ? new DateTime(now.Year, (now.Month == 1 ? 12 : now.Month - 1), 1) : new DateTime(now.Year, now.Month, 1);
-            long dayInSeconds = new DateTimeOffset(firstOfMonth).ToUnixTimeSeconds();
-            return dataRepository.RetrieveMonthlyRecords(userID, teamID, dayInSeconds);
+            long dayInSeconds = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
+            return userDataRepository.RetrieveMonthlyRecords(userID, teamID, dayInSeconds);
         }
     }
 }

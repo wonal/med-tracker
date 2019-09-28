@@ -6,11 +6,11 @@ using System.Collections.Generic;
 
 namespace medtracker.SQL
 {
-    public class DataRepository : IDataRepository
+    public class UserDataRepository : IUserDataRepository
     {
         private readonly string connectionString;
 
-        public DataRepository(IConfiguration config)
+        public UserDataRepository(IConfiguration config)
         {
             connectionString = $"Data Source={config["DBPath"]}data.db";
         }
@@ -45,7 +45,7 @@ namespace medtracker.SQL
         {
             using (var connection = new SqliteConnection(connectionString))
             {
-                return connection.Query<DataDTO>("select * from Data where UserId = (@userID) and TeamId = (@teamID) and Date >= (@startDateInSeconds) order by Date", 
+                return connection.Query<DataDTO>("select * from Data where UserId = (@userID) and TeamId = (@teamID) and Date <= (@startDateInSeconds) order by Date desc limit 30", 
                     new { userID, teamID, startDateInSeconds});
             }
         }
