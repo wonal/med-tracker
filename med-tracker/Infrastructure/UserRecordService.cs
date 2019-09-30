@@ -76,7 +76,7 @@ namespace medtracker.Infrastructure
             var resultObj = RetrieveRawStats(userID, teamID);
             if (resultObj.Error) return new CommandResult { Error = true, ResultMessage = $"No results available for this month's report." };
             var month = DateTime.Parse(resultObj.Stats.Month);
-            var resultMessage = $"Stats for {month.ToString("MMMM")}.  Total # of headaches: {resultObj.Stats.TotalHa}, Avg {resultObj.Stats.AvgMaxalt} per week, Avg Aleve per week: {resultObj.Stats.AvgAleve}";
+            var resultMessage = $"Stats for {month.ToString("MMMM")}.  Total # of headaches: {resultObj.Stats.TotalHa}, Avg of {resultObj.Stats.AvgMaxalt} Maxalt per week, Avg Aleve per week: {resultObj.Stats.AvgAleve}";
             return new CommandResult { Error = false, ResultMessage = resultMessage };
         }
 
