@@ -10,5 +10,6 @@ namespace medtracker.SQL
         void SetUserTime(string userID, string teamID, int time);
         IEnumerable<int> GetUserTime(string userID, string TeamID);
         void DeleteUserTime(string userID, string teamID);
+        IEnumerable<UserTeam> GetUniqueUsers();
     }
 }

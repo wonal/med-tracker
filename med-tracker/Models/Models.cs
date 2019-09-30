@@ -19,4 +19,13 @@ namespace medtracker.Models
         public decimal AvgMaxalt { get; set; }
         public decimal AvgAleve { get; set; }
     }
+
+    public class MonthlyData
+    {
+        public string Month { get; set; }
+        public int TotalHa { get; set; }
+        public decimal AvgMaxalt { get; set; }
+        public decimal AvgAleve { get; set; }
+
+    }
 }

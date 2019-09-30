@@ -2,6 +2,7 @@
 using medtracker.Models;
 using medtracker.SQL;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading;
@@ -18,6 +19,7 @@ namespace medtracker.Infrastructure
         private readonly IUserTimesRepository userPreferences;
         private readonly CredentialsRepository credentials;
         private readonly ISubscriberRepository subscriberRepository;
+        private readonly MonthlyDataRepository monthlyDataRepository;
         private readonly UserRecordService userRecordService;
 
         public BackgroundAlertService(
@@ -25,11 +27,13 @@ namespace medtracker.Infrastructure
             IUserTimesRepository userPreferences, 
             CredentialsRepository credentials,
             ISubscriberRepository subscriberRepository,
+            MonthlyDataRepository monthlyDataRepository,
             UserRecordService userRecordService)
         {
             this.slackAPI = slackAPI;
             this.userPreferences = userPreferences;
             this.subscriberRepository = subscriberRepository;
+            this.monthlyDataRepository = monthlyDataRepository;
             this.userRecordService = userRecordService;
             this.credentials = credentials;
             currentTime = Utilities.CalculateSeconds(DateTime.Now);
@@ -73,6 +77,11 @@ namespace medtracker.Infrastructure
             var currentDayInSec = new DateTimeOffset(currentDay).ToUnixTimeSeconds();
             if (currentDayInSec >= firstOfMonth)
             {
+                var users = userPreferences.GetUniqueUsers();
+                foreach (UserTeam ut in users)
+                {
+                    //figure out how to get stats and then store
+                }
                 var subscribers = subscriberRepository.GetSubscribers();
                 if (subscribers.Any())
                 {

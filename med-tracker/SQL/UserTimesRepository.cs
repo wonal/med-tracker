@@ -48,6 +48,14 @@ namespace medtracker.SQL
                 return connection.Query<int>(@"select Time from UserTimes where UserId = (@userID) and TeamId = (@teamID)", new { userID, teamID });
             }
         }
+
+        public IEnumerable<UserTeam> GetUniqueUsers()
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                return connection.Query<UserTeam>(@"select distinct (UserId, TeamId) from UserTimes");
+            }
+        }
         public void DeleteUserTime(string userID, string teamID)
         {
             using (var connection = new SqliteConnection(connectionString))
