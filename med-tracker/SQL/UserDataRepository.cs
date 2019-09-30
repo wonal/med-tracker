@@ -41,12 +41,21 @@ namespace medtracker.SQL
             }
         }
 
-        public IEnumerable<DataDTO> RetrieveMonthlyRecords(string userID, string teamID, long startDateInSeconds)
+        public IEnumerable<DataDTO> GetLastThirtyRecords(string userID, string teamID, long currentDateInSeconds)
         {
             using (var connection = new SqliteConnection(connectionString))
             {
-                return connection.Query<DataDTO>("select * from Data where UserId = (@userID) and TeamId = (@teamID) and Date <= (@startDateInSeconds) order by Date desc limit 30", 
-                    new { userID, teamID, startDateInSeconds});
+                return connection.Query<DataDTO>("select * from Data where UserId = (@userID) and TeamId = (@teamID) and Date <= (@currentDateInSeconds) order by Date desc limit 30", 
+                    new { userID, teamID, currentDateInSeconds});
+            }
+        }
+
+        public IEnumerable<DataDTO> GetCurrentMonthRecords(string userId, string teamId, long startDateInSeconds)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                return connection.Query<DataDTO>("select * from Data where UserId = (@userId) and TeamId = (@teamId) and Date >= (@startDateInSeconds) order by Date limit 31",
+                    new { userId, teamId, startDateInSeconds });
             }
         }
     }

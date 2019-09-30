@@ -59,7 +59,8 @@ namespace medtracker.Infrastructure
         }
         public CommandResult RetrieveMonthsRecords(string userID, string teamID)
         {
-            var results = RetrieveCurrentMonth(userID, teamID).Select(
+            long dayInSeconds = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
+            var results =  userDataRepository.GetLastThirtyRecords(userID, teamID, dayInSeconds).Select(
                 r => new UserRecordDTO {
                     Date = DateTimeOffset.FromUnixTimeSeconds(r.date).ToString("d"),
                     HA_Present = r.ha_present,
@@ -72,18 +73,32 @@ namespace medtracker.Infrastructure
 
         public CommandResult RetrieveMonthStats(string userID, string teamID)
         {
-            var results = RetrieveCurrentMonth(userID, teamID);
-            var month = Utilities.FormattedReportMonth(DateTime.Now);
-            if (results.Count() == 0) return new CommandResult { Error = true, ResultMessage = $"Monthly report for {month}: No results available." };
-            var resultObj = DataService.CalculateMonthlyStats(results);
-            var resultMessage = $"Stats for {month}.  Total # of headaches: {resultObj.TotalHA}, Total # Maxalt taken: {resultObj.TotalMaxalt} (Avg {resultObj.AvgMaxalt} per week), Avg Aleve per week: {resultObj.AvgAleve}";
+            var resultObj = RetrieveRawStats(userID, teamID);
+            if (resultObj.Error) return new CommandResult { Error = true, ResultMessage = $"No results available for this month's report." };
+            var month = DateTime.Parse(resultObj.Stats.Month);
+            var resultMessage = $"Stats for {month.ToString("MMMM")}.  Total # of headaches: {resultObj.Stats.TotalHa}, Avg {resultObj.Stats.AvgMaxalt} per week, Avg Aleve per week: {resultObj.Stats.AvgAleve}";
             return new CommandResult { Error = false, ResultMessage = resultMessage };
         }
 
-        private IEnumerable<DataDTO> RetrieveCurrentMonth(string userID, string teamID)
+        public DataResult RetrieveRawStats(string userID, string teamID)
         {
-            long dayInSeconds = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
-            return userDataRepository.RetrieveMonthlyRecords(userID, teamID, dayInSeconds);
+            var month = GetFirstOfMonth(DateTime.Now);
+            long startDayInSeconds = new DateTimeOffset(month).ToUnixTimeSeconds();
+            var results = userDataRepository.GetCurrentMonthRecords(userID, teamID, startDayInSeconds);
+            if (!results.Any()) return new DataResult { Error = true, Stats = null };
+            var resultObj = DataService.CalculateMonthlyStats(results);
+            return new DataResult { Error = false, Stats = new MonthlyData { Month = month.ToString("yyyy/MM"), TotalHa = resultObj.TotalHA, AvgMaxalt = resultObj.AvgMaxalt, AvgAleve = resultObj.AvgAleve } };
+        }
+
+        //Returns the first of the month unless the current day is the first of the month, in which case it returns previous month
+        private static DateTime GetFirstOfMonth(DateTime time)
+        {
+            if (time.Day == 1)
+            {
+                time.AddMonths(-1);
+                return new DateTime(time.Year, time.Month, time.Day);
+            }
+            return new DateTime(time.Year, time.Month, 1);
         }
     }
 }
