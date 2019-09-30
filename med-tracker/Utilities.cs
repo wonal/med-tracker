@@ -1,4 +1,5 @@
-﻿using System;
+﻿using medtracker.Config;
+using System;
 
 namespace medtracker
 {
@@ -11,7 +12,7 @@ namespace medtracker
 
         public static DateTime NextReportDate(DateTime time)
         {
-            return new DateTime(time.Year, time.Month, time.Day, 8, 0, 0);
+            return new DateTime(time.Year, time.Month, Constants.reportDay, 8, 0, 0);
         }
 
         

@@ -1,4 +1,5 @@
-﻿using medtracker.DTOs;
+﻿using medtracker.Config;
+using medtracker.DTOs;
 using medtracker.Models;
 using medtracker.SQL;
 using Microsoft.Extensions.Hosting;
@@ -39,7 +40,7 @@ namespace medtracker.Infrastructure
             currentTime = Utilities.CalculateSeconds(DateTime.Now);
 
             var time = DateTime.Now;
-            firstOfMonth = time.Day == 1 ? new DateTimeOffset(Utilities.NextReportDate(time)).ToUnixTimeSeconds() : new DateTimeOffset(Utilities.NextReportDate(time.AddMonths(1))).ToUnixTimeSeconds();
+            firstOfMonth = time.Day == Constants.reportDay ? new DateTimeOffset(Utilities.NextReportDate(time)).ToUnixTimeSeconds() : new DateTimeOffset(Utilities.NextReportDate(time.AddMonths(1))).ToUnixTimeSeconds();
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -80,7 +81,11 @@ namespace medtracker.Infrastructure
                 var users = userPreferences.GetUniqueUsers();
                 foreach (UserTeam ut in users)
                 {
-                    //figure out how to get stats and then store
+                    var monthData = userRecordService.RetrieveRawStats(ut.userID, ut.teamID);
+                    if(!monthData.Error)
+                    {
+                        monthlyDataRepository.StoreData(ut.userID, ut.teamID, monthData.Stats);
+                    }
                 }
                 var subscribers = subscriberRepository.GetSubscribers();
                 if (subscribers.Any())

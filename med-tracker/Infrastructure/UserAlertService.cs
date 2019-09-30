@@ -45,7 +45,7 @@ namespace medtracker.Infrastructure
         {
             subscriberRepository.SetSubscriber(userId, teamId);
             var time = DateTime.Now;
-            var reportDay = time.Day == Constants.reportDay ? time.ToString("d") : time.AddMonths(1).ToString("d");
+            var reportDay = time.Day == Constants.reportDay ? time.ToString("d") : Utilities.NextReportDate(time.AddMonths(1)).ToString("d");
             return new CommandResult { Error = false, ResultMessage = $"Subscribed! Next report: {reportDay}" };
         }
 
